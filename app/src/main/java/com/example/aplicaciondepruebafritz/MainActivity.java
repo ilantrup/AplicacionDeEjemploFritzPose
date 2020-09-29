@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.graphics.Canvas;
@@ -632,12 +633,11 @@ public class MainActivity extends Activity {
                         Log.d("resultadoArray", String.valueOf(poseResult));
                         posesOnImage = visionImage.overlaySkeletons(arrayPose);
 
-                        Canvas can = new Canvas();
+                        final Canvas can = textureView.lockCanvas();
                         for (Pose pose : arrayPose) {
                             pose.draw(can);
                         }
-                        textureView.draw(can);
-
+                        textureView.unlockCanvasAndPost(can);
                         //dibujarPose(posesOnImage);
 
                        // imageView.setImageBitmap(posesOnImage);
