@@ -177,13 +177,15 @@ public class MainActivity extends Activity {
 
         //bit = getBitmapFromURL("https://firebasestorage.googleapis.com/v0/b/proyecto-final-637d2.appspot.com/o/Calor%2FSaltos-sin-cuerda.gif?alt=media&token=87755abf-de08-4735-a222-49e954e164f0");
 
-        bit = BitmapFactory.decodeResource(this.getResources(), R.drawable.mio6);
+      /*  bit = BitmapFactory.decodeResource(this.getResources(), R.drawable.mio6);
         FritzVisionImage visionImage = FritzVisionImage.fromBitmap(bit);
         poseResult = posePredictor.predict(visionImage);
         arrayPose = poseResult.getPoses();
         Log.d("resultadoArray", String.valueOf(poseResult));
         Bitmap posesOnImage = visionImage.overlaySkeletons(arrayPose);
         //imageView.setImageBitmap(posesOnImage);
+
+       */
 
         // Draw the pose to the canvas.
        /* Canvas canvas = new Canvas(posesOnImage);
@@ -794,9 +796,13 @@ public class MainActivity extends Activity {
 
 
     public void dibujarPose(Bitmap dibujo){
-        imageView.setImageBitmap(dibujo);
-        textureView.setVisibility(View.GONE);
-        takePictureButton.setVisibility(View.GONE);
+       // imageView.setImageBitmap(dibujo);
+        //textureView.setVisibility(View.GONE);
+        //takePictureButton.setVisibility(View.GONE);
+
+        Intent i = new Intent(this, MostrarFoto.class);
+        i.putExtra("Foto", dibujo);
+        startActivity(i);
     }
 }
 
