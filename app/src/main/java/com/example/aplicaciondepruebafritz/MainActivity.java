@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -90,7 +91,7 @@ public class MainActivity extends Activity {
 
     List<Pose> arrayPose;
 
-    Bitmap posesOnImage;
+   public Bitmap posesOnImage;
     ImageOrientation imageRotation;
 
     File pictureFile;
@@ -652,6 +653,7 @@ public class MainActivity extends Activity {
                     } finally {
                         if (image != null) {
                             image.close();
+                            dibujarPose(posesOnImage);
                         }
                     }
                 }
@@ -668,8 +670,8 @@ public class MainActivity extends Activity {
                     }
                 }
             };
-            dibujarPose(posesOnImage);
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
+
             final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
@@ -800,8 +802,17 @@ public class MainActivity extends Activity {
         //textureView.setVisibility(View.GONE);
         //takePictureButton.setVisibility(View.GONE);
 
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        dibujo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        Bundle b = new Bundle();
+        b.putByteArray("Foto",byteArray);
+
+
         Intent i = new Intent(this, MostrarFoto.class);
-        i.putExtra("Foto", dibujo);
+
+        i.putExtras(b);
         startActivity(i);
     }
 }
