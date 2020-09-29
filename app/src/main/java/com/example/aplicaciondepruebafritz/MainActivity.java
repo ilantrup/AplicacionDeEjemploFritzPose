@@ -632,6 +632,12 @@ public class MainActivity extends Activity {
                         Log.d("resultadoArray", String.valueOf(poseResult));
                         posesOnImage = visionImage.overlaySkeletons(arrayPose);
 
+                        Canvas can = new Canvas();
+                        for (Pose pose : arrayPose) {
+                            pose.draw(can);
+                        }
+                        textureView.draw(can);
+
                         //dibujarPose(posesOnImage);
 
                        // imageView.setImageBitmap(posesOnImage);
@@ -653,7 +659,7 @@ public class MainActivity extends Activity {
                     } finally {
                         if (image != null) {
                             image.close();
-                            dibujarPose(posesOnImage);
+                        //    dibujarPose(posesOnImage);
                         }
                     }
                 }
@@ -811,6 +817,7 @@ public class MainActivity extends Activity {
 
 
         Intent i = new Intent(this, MostrarFoto.class);
+
 
         i.putExtras(b);
         startActivity(i);
