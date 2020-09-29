@@ -90,6 +90,7 @@ public class MainActivity extends Activity {
 
     List<Pose> arrayPose;
 
+    Bitmap posesOnImage;
     ImageOrientation imageRotation;
 
     File pictureFile;
@@ -626,29 +627,33 @@ public class MainActivity extends Activity {
                         poseResult = posePredictor.predict(visionImage);
                         arrayPose = poseResult.getPoses();
                         Log.d("resultadoArray", String.valueOf(poseResult));
-                        Bitmap posesOnImage = visionImage.overlaySkeletons(arrayPose);
+                        posesOnImage = visionImage.overlaySkeletons(arrayPose);
+
+                        //dibujarPose(posesOnImage);
+
                        // imageView.setImageBitmap(posesOnImage);
                      //   textureView.setVisibility(View.GONE);
                      //   takePictureButton.setVisibility(View.GONE);
 
 
-                        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                        byte[] bytes = new byte[buffer.capacity()];
-                        buffer.get(bytes);
-                        save(bytes);
+                      //  ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                       // byte[] bytes = new byte[buffer.capacity()];
+                       // buffer.get(bytes);
+                        //save(bytes);
 
 
 
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        //} catch (FileNotFoundException e) {
+                       // e.printStackTrace();
+                        // } catch (IOException e) {
+                       // e.printStackTrace();
                     } finally {
                         if (image != null) {
                             image.close();
                         }
                     }
                 }
+
                 private void save(byte[] bytes) throws IOException {
                     OutputStream output = null;
                     try {
@@ -661,6 +666,7 @@ public class MainActivity extends Activity {
                     }
                 }
             };
+            dibujarPose(posesOnImage);
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
             final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
                 @Override
@@ -785,6 +791,13 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 
+
+
+    public void dibujarPose(Bitmap dibujo){
+        imageView.setImageBitmap(dibujo);
+        textureView.setVisibility(View.GONE);
+        takePictureButton.setVisibility(View.GONE);
+    }
 }
 
 
