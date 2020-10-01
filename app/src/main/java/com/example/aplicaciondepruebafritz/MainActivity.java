@@ -11,9 +11,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.graphics.Canvas;
 import android.hardware.camera2.CameraAccessException;
@@ -87,6 +90,8 @@ public class MainActivity extends Activity {
     Context con;
     ImageView imageView;
 
+    ImageView imageViewSuper;
+
     // A sensitivity parameters we'll use later.
     private float minPoseThreshold = 0.6f;
 
@@ -150,6 +155,7 @@ public class MainActivity extends Activity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private Bitmap bitmap;
 
 
     @Override
@@ -171,6 +177,7 @@ public class MainActivity extends Activity {
         Fritz.configure(this, "4f1d35d761a24d328e07e0014c1cd515");
 
         imageView = this.findViewById(R.id.txtImg);
+        imageViewSuper= this.findViewById(R.id.imageViewSuperpuesta);
 
         // For accurate
         PoseOnDeviceModel onDeviceModel = FritzVisionModels.getHumanPoseEstimationOnDeviceModel(ModelVariant.ACCURATE);
@@ -622,22 +629,29 @@ public class MainActivity extends Activity {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
                     Image image = null;
+                    CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                     try {
                         image = reader.acquireLatestImage();
 
-                        String cameraId = "2";
+                        String cameraId = manager.getCameraIdList()[1];
                         ImageOrientation imageRotationFromCamera = FritzVisionOrientation.getImageOrientationFromCamera(MainActivity.this, cameraId);
                         FritzVisionImage visionImage = FritzVisionImage.fromMediaImage(image,imageRotationFromCamera);
                         poseResult = posePredictor.predict(visionImage);
                         arrayPose = poseResult.getPoses();
                         Log.d("resultadoArray", String.valueOf(poseResult));
                         posesOnImage = visionImage.overlaySkeletons(arrayPose);
-
-                        final Canvas can = textureView.lockCanvas();
+/*
+                        bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+                        Canvas can = new Canvas(bitmap);
                         for (Pose pose : arrayPose) {
                             pose.draw(can);
                         }
-                        textureView.unlockCanvasAndPost(can);
+
+                        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                        paint.setColor(Color.RED);
+                        can.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, 100, paint);
+*/
+
                         //dibujarPose(posesOnImage);
 
                        // imageView.setImageBitmap(posesOnImage);
@@ -656,13 +670,19 @@ public class MainActivity extends Activity {
                        // e.printStackTrace();
                         // } catch (IOException e) {
                        // e.printStackTrace();
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
                     } finally {
                         if (image != null) {
                             image.close();
-                        //    dibujarPose(posesOnImage);
+                            dibujarPose(posesOnImage);
+
                         }
                     }
+
                 }
+
+
 
                 private void save(byte[] bytes) throws IOException {
                     OutputStream output = null;
@@ -676,6 +696,7 @@ public class MainActivity extends Activity {
                     }
                 }
             };
+
             reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
 
             final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
@@ -735,7 +756,7 @@ public class MainActivity extends Activity {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
         try {
-            cameraId = manager.getCameraIdList()[0];
+            cameraId = manager.getCameraIdList()[1];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
@@ -821,6 +842,11 @@ public class MainActivity extends Activity {
 
         i.putExtras(b);
         startActivity(i);
+    }
+
+    public void dibujarEnCamara(Bitmap bit){
+       // imageViewSuper.setBackgroundColor(Color.TRANSPARENT);
+        imageViewSuper.setImageDrawable(new BitmapDrawable(getResources(), bit));
     }
 }
 
