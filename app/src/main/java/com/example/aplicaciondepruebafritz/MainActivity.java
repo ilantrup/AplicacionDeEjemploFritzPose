@@ -177,7 +177,7 @@ public class MainActivity extends Activity {
         Fritz.configure(this, "4f1d35d761a24d328e07e0014c1cd515");
 
         imageView = this.findViewById(R.id.txtImg);
-        imageViewSuper= this.findViewById(R.id.imageViewSuperpuesta);
+      //  imageViewSuper= this.findViewById(R.id.imageViewSuperpuesta);
 
         // For accurate
         PoseOnDeviceModel onDeviceModel = FritzVisionModels.getHumanPoseEstimationOnDeviceModel(ModelVariant.ACCURATE);
