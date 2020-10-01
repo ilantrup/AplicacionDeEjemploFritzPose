@@ -633,7 +633,7 @@ public class MainActivity extends Activity {
                     try {
                         image = reader.acquireLatestImage();
 
-                        String cameraId = manager.getCameraIdList()[1];
+                        String cameraId = manager.getCameraIdList()[0];
                         ImageOrientation imageRotationFromCamera = FritzVisionOrientation.getImageOrientationFromCamera(MainActivity.this, cameraId);
                         FritzVisionImage visionImage = FritzVisionImage.fromMediaImage(image,imageRotationFromCamera);
                         poseResult = posePredictor.predict(visionImage);
@@ -756,7 +756,7 @@ public class MainActivity extends Activity {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
         try {
-            cameraId = manager.getCameraIdList()[1];
+            cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
