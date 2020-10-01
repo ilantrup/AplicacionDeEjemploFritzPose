@@ -625,7 +625,7 @@ public class MainActivity extends Activity {
                     try {
                         image = reader.acquireLatestImage();
 
-                        String cameraId = "1";
+                        String cameraId = "2";
                         ImageOrientation imageRotationFromCamera = FritzVisionOrientation.getImageOrientationFromCamera(MainActivity.this, cameraId);
                         FritzVisionImage visionImage = FritzVisionImage.fromMediaImage(image,imageRotationFromCamera);
                         poseResult = posePredictor.predict(visionImage);
