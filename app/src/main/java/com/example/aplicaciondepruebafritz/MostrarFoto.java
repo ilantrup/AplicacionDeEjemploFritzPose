@@ -28,7 +28,6 @@ ImageView imgFoto;
         Bitmap bmp = MainActivity.getInstance().getBitmapFromMemCache("FotoMarcada");
 
 
-
         imgFoto.setImageBitmap(bmp);
     }
 }
