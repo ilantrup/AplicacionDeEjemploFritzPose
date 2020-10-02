@@ -35,6 +35,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
+import android.util.LruCache;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -82,7 +83,7 @@ import ai.fritz.vision.poseestimation.HumanSkeleton;
 import ai.fritz.vision.poseestimation.Pose;
 import ai.fritz.vision.poseestimation.PoseOnDeviceModel;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private FritzVisionPosePredictor posePredictor;
     private FritzVisionPoseResult poseResult;
@@ -156,6 +157,19 @@ public class MainActivity extends Activity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
     private Bitmap bitmap;
+
+    private LruCache<String, Bitmap> mMemoryCache;
+
+
+    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+    // Use 1/8th of the available memory for this memory cache.
+    final int cacheSize = maxMemory / 8;
+
+    private static MainActivity instance;
+
+
+
 
 
     @Override
@@ -273,6 +287,17 @@ public class MainActivity extends Activity {
                 takePicture();
             }
         });
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+
+        instance = this;
 
     }
 
@@ -829,6 +854,7 @@ public class MainActivity extends Activity {
         //textureView.setVisibility(View.GONE);
         //takePictureButton.setVisibility(View.GONE);
 
+/*
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         dibujo.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
@@ -837,10 +863,14 @@ public class MainActivity extends Activity {
         b.putByteArray("Foto",byteArray);
 
 
+ */
+
+        addBitmapToMemoryCache("FotoMarcada", dibujo);
+
         Intent i = new Intent(this, MostrarFoto.class);
 
 
-        i.putExtras(b);
+      //  i.putExtras(b);
         startActivity(i);
     }
 
@@ -848,6 +878,21 @@ public class MainActivity extends Activity {
        // imageViewSuper.setBackgroundColor(Color.TRANSPARENT);
         imageViewSuper.setImageDrawable(new BitmapDrawable(getResources(), bit));
     }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
+    }
+
+    public static MainActivity getInstance() {
+        return instance;
+    }
+
 }
 
 

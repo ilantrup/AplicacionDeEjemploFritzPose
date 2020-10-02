@@ -18,11 +18,16 @@ ImageView imgFoto;
 
         imgFoto = this.findViewById(R.id.imgMostrarFoto);
 
-
+/*
         Bundle b = this.getIntent().getExtras();
 
         byte[] byteArray = b.getByteArray("Foto");
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+ */
+
+        Bitmap bmp = MainActivity.getInstance().getBitmapFromMemCache("FotoMarcada");
+
+
 
         imgFoto.setImageBitmap(bmp);
     }
