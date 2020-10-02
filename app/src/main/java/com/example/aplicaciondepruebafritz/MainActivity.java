@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     private LruCache<String, Bitmap> mMemoryCache;
 
 
-    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 612);
+    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 10);
 
     // Use 1/8th of the available memory for this memory cache.
     final int cacheSize = maxMemory / 8;
@@ -865,7 +865,10 @@ public class MainActivity extends AppCompatActivity {
 
  */
 
-        addBitmapToMemoryCache("FotoMarcada", dibujo);
+        int nh = (int) ( dibujo.getHeight() * (512.0 / dibujo.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(dibujo, 512, nh, true);
+
+        addBitmapToMemoryCache("FotoMarcada", scaled);
 
         Intent i = new Intent(this, MostrarFoto.class);
 
