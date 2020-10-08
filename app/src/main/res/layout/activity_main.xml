@@ -31,7 +31,6 @@
         android:text="@string/take_picture" />
 
     <SurfaceView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/imagesurface"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -39,8 +38,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/texture"
         app:layout_constraintLeft_toLeftOf="@id/texture"
         app:layout_constraintRight_toRightOf="@id/texture"
-        android:background="#00ff00">
-    </SurfaceView>
+        android:background="#00ff00"
+        />
 
     <TextureView
         app:layout_constraintTop_toBottomOf="@+id/txtImg"

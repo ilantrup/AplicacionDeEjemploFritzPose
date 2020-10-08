@@ -577,6 +577,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
             // Transform you image captured size according to the surface width and height
+            takePicture();
         }
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
@@ -584,6 +585,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         }
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            takePicture();
         }
     };
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
