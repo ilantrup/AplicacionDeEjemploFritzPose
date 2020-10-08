@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
@@ -66,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import ai.fritz.core.Fritz;
 import ai.fritz.core.FritzOnDeviceModel;
@@ -83,7 +85,7 @@ import ai.fritz.vision.poseestimation.HumanSkeleton;
 import ai.fritz.vision.poseestimation.Pose;
 import ai.fritz.vision.poseestimation.PoseOnDeviceModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Callback{
 
     private FritzVisionPosePredictor posePredictor;
     private FritzVisionPoseResult poseResult;
@@ -191,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
         Fritz.configure(this, "4f1d35d761a24d328e07e0014c1cd515");
 
         imageView = this.findViewById(R.id.txtImg);
-      //  imageViewSuper= this.findViewById(R.id.imageViewSuperpuesta);
 
         // For accurate
         PoseOnDeviceModel onDeviceModel = FritzVisionModels.getHumanPoseEstimationOnDeviceModel(ModelVariant.ACCURATE);
@@ -298,6 +299,11 @@ public class MainActivity extends AppCompatActivity {
         };
 
         instance = this;
+
+        SurfaceView view = new SurfaceView(this);
+        view.getHolder().addCallback(this);
+
+
 
     }
 
@@ -665,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
                         arrayPose = poseResult.getPoses();
                         Log.d("resultadoArray", String.valueOf(poseResult));
                         posesOnImage = visionImage.overlaySkeletons(arrayPose);
-/*
+
                         bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
                         Canvas can = new Canvas(bitmap);
                         for (Pose pose : arrayPose) {
@@ -675,7 +681,8 @@ public class MainActivity extends AppCompatActivity {
                         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
                         paint.setColor(Color.RED);
                         can.drawCircle(bitmap.getWidth()/2, bitmap.getHeight()/2, 100, paint);
-*/
+
+
 
                         //dibujarPose(posesOnImage);
 
@@ -896,6 +903,41 @@ public class MainActivity extends AppCompatActivity {
         return instance;
     }
 
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        tryDrawing(holder);
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        tryDrawing(holder);
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    private void tryDrawing(SurfaceHolder holder) {
+        Log.i(TAG, "Trying to draw...");
+
+        Canvas canvas = holder.lockCanvas();
+        if (canvas == null) {
+            Log.e(TAG, "Cannot draw onto the canvas as it's null");
+        } else {
+            drawMyStuff(canvas);
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    private void drawMyStuff(final Canvas canvas) {
+        Random random = new Random();
+        Log.i(TAG, "Drawing...");
+        canvas.drawRGB(255, 128, 128);
+    }
 }
 
 

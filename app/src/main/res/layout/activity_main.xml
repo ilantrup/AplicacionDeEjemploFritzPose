@@ -16,25 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-<ImageView
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    app:layout_constraintTop_toTopOf="@id/texture"
-    app:layout_constraintBottom_toBottomOf="@+id/texture"
-    app:layout_constraintLeft_toLeftOf="@id/texture"
-    app:layout_constraintRight_toRightOf="@id/texture"
-    android:id="@+id/imageViewSuperpuesta"
-    android:layout_alignParentTop="true"
-    />
 
-    <TextureView
-        app:layout_constraintTop_toBottomOf="@+id/txtImg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="200dp"
-        android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
     <Button
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -47,5 +29,27 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/take_picture" />
+
+    <SurfaceView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/imagesurface"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="@id/texture"
+        app:layout_constraintBottom_toBottomOf="@+id/texture"
+        app:layout_constraintLeft_toLeftOf="@id/texture"
+        app:layout_constraintRight_toRightOf="@id/texture"
+        android:background="#00ff00">
+    </SurfaceView>
+
+    <TextureView
+        app:layout_constraintTop_toBottomOf="@+id/txtImg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="200dp"
+        android:id="@+id/texture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
