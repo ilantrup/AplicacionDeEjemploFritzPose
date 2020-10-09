@@ -304,6 +304,14 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         view.getHolder().addCallback(this);
 
 
+        SurfaceView sfvTrack = (SurfaceView)findViewById(R.id.imagesurface);
+        sfvTrack.setZOrderOnTop(true);    // necessary
+        SurfaceHolder sfhTrackHolder = sfvTrack.getHolder();
+        sfhTrackHolder.setFormat(PixelFormat.TRANSPARENT);
+
+        sfvTrack.setVisibility(View.GONE);
+        view.setVisibility(View.GONE);
+        takePictureButton.setVisibility(View.GONE);
 
     }
 
@@ -709,7 +717,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                     } finally {
                         if (image != null) {
                             image.close();
-                            dibujarPose(posesOnImage);
+                           // dibujarPose(posesOnImage);
 
                         }
                     }
@@ -756,6 +764,11 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
             }, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
+        }
+        try {
+            dibujarEnCamara(posesOnImage);
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
         }
     }
     protected void createCameraPreview() {
@@ -888,7 +901,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
 
     public void dibujarEnCamara(Bitmap bit){
        // imageViewSuper.setBackgroundColor(Color.TRANSPARENT);
-        imageViewSuper.setImageDrawable(new BitmapDrawable(getResources(), bit));
+        imageView.setImageDrawable(new BitmapDrawable(getResources(), bit));
     }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
