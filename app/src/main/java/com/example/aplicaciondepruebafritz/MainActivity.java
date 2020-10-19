@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
@@ -82,6 +83,7 @@ import ai.fritz.vision.poseestimation.FritzVisionPosePredictor;
 import ai.fritz.vision.poseestimation.FritzVisionPosePredictorOptions;
 import ai.fritz.vision.poseestimation.FritzVisionPoseResult;
 import ai.fritz.vision.poseestimation.HumanSkeleton;
+import ai.fritz.vision.poseestimation.Keypoint;
 import ai.fritz.vision.poseestimation.Pose;
 import ai.fritz.vision.poseestimation.PoseOnDeviceModel;
 
@@ -681,11 +683,47 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                         arrayPose = poseResult.getPoses();
                         Log.d("resultadoArray", String.valueOf(poseResult));
                         posesOnImage = visionImage.overlaySkeletons(arrayPose);
-
                         bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
                         Canvas can = new Canvas(bitmap);
                         for (Pose pose : arrayPose) {
                             pose.draw(can);
+                        }
+                        if(arrayPose.size()>0)
+                        {
+                            Pose pose = arrayPose.get(0);
+
+                            // Get the body keypoints
+                            Keypoint[] keypoints = pose.getKeypoints();
+
+                            // Get the name of the keypoint
+                            String hombizq= keypoints[5].getName();
+                            PointF keypointPoisitionhombizq = keypoints[5].getPosition();
+                            Log.d("Pose", hombizq + keypointPoisitionhombizq.toString());
+                            //
+                            String hombder = keypoints[6].getName();
+                            PointF keypointPoisitionhombder = keypoints[6].getPosition();
+                            Log.d("Pose", hombder + keypointPoisitionhombder.toString());
+                            //
+                            String cadizq = keypoints[11].getName();
+                            PointF keypointPoisitioncadizq = keypoints[11].getPosition();
+                            Log.d("Pose", cadizq + keypointPoisitioncadizq.toString());
+                            //
+                            String cadder = keypoints[12].getName();
+                            PointF keypointPoisitioncadder = keypoints[12].getPosition();
+                            Log.d("Pose", cadder + keypointPoisitioncadder.toString());
+                            //
+                            String partName = keypoints[13].getName();
+                            PointF keypointPoisition = keypoints[13].getPosition();
+                            Log.d("Pose", partName + keypointPoisition.toString());
+                            //
+                            String rodizq = keypoints[14].getName();
+                            PointF keypointPoisitionrodizq = keypoints[14].getPosition();
+                            Log.d("Pose",rodizq + keypointPoisitionrodizq.toString());
+                            //
+                            String rodder = keypoints[15].getName();
+                            PointF keypointPoisitionrodder = keypoints[15].getPosition();
+                            Log.d("Pose", rodder + keypointPoisitionrodder.toString());
+
                         }
 
                         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
