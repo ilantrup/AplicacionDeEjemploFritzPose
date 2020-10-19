@@ -723,6 +723,9 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                             String rodder = keypoints[15].getName();
                             PointF keypointPoisitionrodder = keypoints[15].getPosition();
                             Log.d("Pose", rodder + keypointPoisitionrodder.toString());
+                            if(keypoints[15].getPosition().x < keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x){
+                                Log.d("Resultado", "Tenes q cerrar las piernas");
+                            }
 
                         }
 
