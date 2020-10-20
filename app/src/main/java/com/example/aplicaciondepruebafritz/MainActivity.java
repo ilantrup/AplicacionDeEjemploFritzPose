@@ -676,7 +676,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                     try {
                         image = reader.acquireLatestImage();
 
-                        String cameraId = manager.getCameraIdList()[0];
+                        String cameraId = manager.getCameraIdList()[1];
                         ImageOrientation imageRotationFromCamera = FritzVisionOrientation.getImageOrientationFromCamera(MainActivity.this, cameraId);
                         FritzVisionImage visionImage = FritzVisionImage.fromMediaImage(image,imageRotationFromCamera);
                         poseResult = posePredictor.predict(visionImage);
@@ -716,16 +716,36 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                             PointF keypointPoisition = keypoints[13].getPosition();
                             Log.d("Pose", partName + keypointPoisition.toString());
                             //
-                            String rodizq = keypoints[14].getName();
-                            PointF keypointPoisitionrodizq = keypoints[14].getPosition();
+                            String rodizq = keypoints[13].getName();
+                            PointF keypointPoisitionrodizq = keypoints[13].getPosition();
                             Log.d("Pose",rodizq + keypointPoisitionrodizq.toString());
                             //
-                            String rodder = keypoints[15].getName();
-                            PointF keypointPoisitionrodder = keypoints[15].getPosition();
+                            String rodder = keypoints[14].getName();
+                            PointF keypointPoisitionrodder = keypoints[14].getPosition();
                             Log.d("Pose", rodder + keypointPoisitionrodder.toString());
-                            if(keypoints[15].getPosition().x < keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x){
+                            //
+                            String tobizq = keypoints[15].getName();
+                            PointF keypointPoisitiontobizq = keypoints[15].getPosition();
+                            Log.d("Pose", tobizq + keypointPoisitiontobizq.toString());
+                            //
+                            String tobder = keypoints[16].getName();
+                            PointF keypointPoisitiontobder = keypoints[16].getPosition();
+                            Log.d("Pose", tobder + keypointPoisitiontobder.toString());
+                            //Piernas afuera
+                            if(keypoints[15].getPosition().x > keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x){
                                 Log.d("Resultado", "Tenes q cerrar las piernas");
+                                Toast.makeText(MainActivity.this, "enes q cerrar las piernas", Toast.LENGTH_SHORT).show();
                             }
+                            //Piernas adentro
+                            if(keypoints[15].getPosition().x < keypoints[5].getPosition().x && keypoints[16].getPosition().x < keypoints[6].getPosition().x){
+                                Toast.makeText(MainActivity.this, "Tenes q abrir las piernas:", Toast.LENGTH_SHORT).show();
+                                Log.d("Resultado", "Tenes q abrir las piernassssssssssssssssssssssssssssssssssssssssssssssssssssss");
+                            }
+                            //Rodillas adentro
+                            /*
+                            if(keypoints[13].getPosition().x < keypoints[15].getPosition().x && keypoints[14].getPosition().x > keypoints[16].getPosition().x){
+                                Log.d("Resultado", "Las rodillas no tienen que estar mirando hacia dentro");
+                            }*/
 
                         }
 
@@ -844,7 +864,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
         try {
-            cameraId = manager.getCameraIdList()[0];
+            cameraId = manager.getCameraIdList()[1];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
