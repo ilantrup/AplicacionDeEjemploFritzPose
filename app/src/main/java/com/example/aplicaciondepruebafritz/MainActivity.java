@@ -704,18 +704,6 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                             PointF keypointPoisitionhombder = keypoints[6].getPosition();
                             Log.d("Pose", hombder + keypointPoisitionhombder.toString());
                             //
-                            String cadizq = keypoints[11].getName();
-                            PointF keypointPoisitioncadizq = keypoints[11].getPosition();
-                            Log.d("Pose", cadizq + keypointPoisitioncadizq.toString());
-                            //
-                            String cadder = keypoints[12].getName();
-                            PointF keypointPoisitioncadder = keypoints[12].getPosition();
-                            Log.d("Pose", cadder + keypointPoisitioncadder.toString());
-                            //
-                            String partName = keypoints[13].getName();
-                            PointF keypointPoisition = keypoints[13].getPosition();
-                            Log.d("Pose", partName + keypointPoisition.toString());
-                            //
                             String rodizq = keypoints[13].getName();
                             PointF keypointPoisitionrodizq = keypoints[13].getPosition();
                             Log.d("Pose",rodizq + keypointPoisitionrodizq.toString());
@@ -733,20 +721,24 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                             Log.d("Pose", tobder + keypointPoisitiontobder.toString());
                             //Piernas afuera
                             if(keypoints[15].getPosition().x > keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x){
-                                Log.d("Resultado", "Tenes q cerrar las piernas");
+                                Log.d("Pose", "Tenes q cerrar las piernas");
                                 Toast.makeText(MainActivity.this, "enes q cerrar las piernas", Toast.LENGTH_SHORT).show();
                             }
                             //Piernas adentro
-                            if(keypoints[15].getPosition().x < keypoints[5].getPosition().x && keypoints[16].getPosition().x < keypoints[6].getPosition().x){
+                            Float valor = keypoints[15].getPosition().x -keypoints[16].getPosition().x;
+                            if(valor < 40.00 && valor > 0){
                                 Toast.makeText(MainActivity.this, "Tenes q abrir las piernas:", Toast.LENGTH_SHORT).show();
-                                Log.d("Resultado", "Tenes q abrir las piernassssssssssssssssssssssssssssssssssssssssssssssssssssss");
+                                Log.d("Pose2", "Tenes q abrir las piernassssssssssssssssssssssssssssssssssssssssssssssssssssss");
+                                Log.d("Pose2", tobizq + keypointPoisitiontobizq.toString());
+                                Log.d("Pose2", tobder + keypointPoisitiontobder.toString());
+                                Log.d("Pose2", valor.toString());
                             }
                             //Rodillas adentro
                             /*
                             if(keypoints[13].getPosition().x < keypoints[15].getPosition().x && keypoints[14].getPosition().x > keypoints[16].getPosition().x){
-                                Log.d("Resultado", "Las rodillas no tienen que estar mirando hacia dentro");
-                            }*/
-
+                                Log.d("Pose", "Las rodillas no tienen que estar mirando hacia dentro");
+                            }
+                            */
                         }
 
                         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
