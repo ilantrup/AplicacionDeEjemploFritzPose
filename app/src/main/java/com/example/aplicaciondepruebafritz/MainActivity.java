@@ -33,6 +33,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -94,8 +95,10 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
 
     Context con;
     ImageView imageView;
-
-    ImageView imageViewSuper;
+    int acumM, acumB;
+    CountDownTimer countDown;
+    Boolean start;
+    long Start,leftTime;
 
     // A sensitivity parameters we'll use later.
     private float minPoseThreshold = 0.6f;
@@ -181,7 +184,12 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        acumB=0;
+        acumM=0;
+        Start= 15000;
+        leftTime=Start;
+        comenzar();
+        start=true;
         //Camera
        /* preview=(SurfaceView)findViewById(R.id.preview);
         previewHolder=preview.getHolder();
@@ -688,57 +696,72 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                         for (Pose pose : arrayPose) {
                             pose.draw(can);
                         }
-                        if(arrayPose.size()>0)
-                        {
-                            Pose pose = arrayPose.get(0);
+                        if(arrayPose.size()>0) {
+                            if (start == true) {
 
-                            // Get the body keypoints
-                            Keypoint[] keypoints = pose.getKeypoints();
 
-                            // Get the name of the keypoint
-                            String hombizq= keypoints[5].getName();
-                            PointF keypointPoisitionhombizq = keypoints[5].getPosition();
-                            Log.d("Pose", hombizq + keypointPoisitionhombizq.toString());
-                            //
-                            String hombder = keypoints[6].getName();
-                            PointF keypointPoisitionhombder = keypoints[6].getPosition();
-                            Log.d("Pose", hombder + keypointPoisitionhombder.toString());
-                            //
-                            String rodizq = keypoints[13].getName();
-                            PointF keypointPoisitionrodizq = keypoints[13].getPosition();
-                            Log.d("Pose",rodizq + keypointPoisitionrodizq.toString());
-                            //
-                            String rodder = keypoints[14].getName();
-                            PointF keypointPoisitionrodder = keypoints[14].getPosition();
-                            Log.d("Pose", rodder + keypointPoisitionrodder.toString());
-                            //
-                            String tobizq = keypoints[15].getName();
-                            PointF keypointPoisitiontobizq = keypoints[15].getPosition();
-                            Log.d("Pose", tobizq + keypointPoisitiontobizq.toString());
-                            //
-                            String tobder = keypoints[16].getName();
-                            PointF keypointPoisitiontobder = keypoints[16].getPosition();
-                            Log.d("Pose", tobder + keypointPoisitiontobder.toString());
-                            //Piernas afuera
-                            if(keypoints[15].getPosition().x > keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x){
-                                Log.d("Pose", "Tenes q cerrar las piernas");
-                                Toast.makeText(MainActivity.this, "enes q cerrar las piernas", Toast.LENGTH_SHORT).show();
-                            }
-                            //Piernas adentro
-                            Float valor = keypoints[15].getPosition().x -keypoints[16].getPosition().x;
-                            if(valor < 40.00 && valor > 0){
-                                Toast.makeText(MainActivity.this, "Tenes q abrir las piernas:", Toast.LENGTH_SHORT).show();
-                                Log.d("Pose2", "Tenes q abrir las piernassssssssssssssssssssssssssssssssssssssssssssssssssssss");
-                                Log.d("Pose2", tobizq + keypointPoisitiontobizq.toString());
-                                Log.d("Pose2", tobder + keypointPoisitiontobder.toString());
-                                Log.d("Pose2", valor.toString());
-                            }
-                            //Rodillas adentro
+                                Pose pose = arrayPose.get(0);
+
+                                // Get the body keypoints
+                                Keypoint[] keypoints = pose.getKeypoints();
+
+                                String hombizq = keypoints[5].getName();
+                                PointF keypointPoisitionhombizq = keypoints[5].getPosition();
+                                Log.d("Pose", hombizq + keypointPoisitionhombizq.toString());
+                                //
+                                String hombder = keypoints[6].getName();
+                                PointF keypointPoisitionhombder = keypoints[6].getPosition();
+                                Log.d("Pose", hombder + keypointPoisitionhombder.toString());
+                                //
+                                String cadizq = keypoints[11].getName();
+                                PointF keypointPoisitioncadizq = keypoints[11].getPosition();
+                                Log.d("Pose", cadizq + keypointPoisitioncadizq.toString());
+                                //
+                                String rodizq = keypoints[13].getName();
+                                PointF keypointPoisitionrodizq = keypoints[13].getPosition();
+                                Log.d("Pose", rodizq + keypointPoisitionrodizq.toString());
+                                //
+                                String rodder = keypoints[14].getName();
+                                PointF keypointPoisitionrodder = keypoints[14].getPosition();
+                                Log.d("Pose", rodder + keypointPoisitionrodder.toString());
+                                //
+                                String tobizq = keypoints[15].getName();
+                                PointF keypointPoisitiontobizq = keypoints[15].getPosition();
+                                Log.d("Pose", tobizq + keypointPoisitiontobizq.toString());
+                                //
+                                String tobder = keypoints[16].getName();
+                                PointF keypointPoisitiontobder = keypoints[16].getPosition();
+                                Log.d("Pose", tobder + keypointPoisitiontobder.toString());
+                                //Piernas afuera
+
+                                //Piernas adentro
+
+                                //Rodillas adentro
                             /*
                             if(keypoints[13].getPosition().x < keypoints[15].getPosition().x && keypoints[14].getPosition().x > keypoints[16].getPosition().x){
                                 Log.d("Pose", "Las rodillas no tienen que estar mirando hacia dentro");
                             }
                             */
+                                Float val = keypoints[13].getPosition().y - keypoints[11].getPosition().y;
+                                Log.d("VALOR", String.valueOf(val));
+                                if (val <= 60) {
+                                    Float valor = keypoints[15].getPosition().x - keypoints[16].getPosition().x;
+                                    if (valor < 40.00 && valor > 0) {
+                                        Log.d("RTA", "abrir");
+                                        //Toast.makeText(MainActivity.this, "Tenes q abrir las piernas:", Toast.LENGTH_SHORT).show();
+                                        //Log.d("Pose2", "Tenes q abrir las piernassssssssssssssssssssssssssssssssssssssssssssssssssssss")
+                                        acumM++;
+                                    } else if (keypoints[15].getPosition().x > keypoints[5].getPosition().x && keypoints[16].getPosition().x > keypoints[6].getPosition().x) {
+                                        //Log.d("Pose", "Tenes q cerrar las piernas");
+                                        Log.d("RTA", "cerrar");
+                                        acumM++;
+                                        //Toast.makeText(MainActivity.this, "enes q cerrar las piernas", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.d("RTA", "bien!");
+                                        acumB++;
+                                    }
+                                }
+                            }
                         }
 
                         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -798,7 +821,7 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(MainActivity.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
                 }
             };
@@ -1005,6 +1028,41 @@ public class MainActivity extends AppCompatActivity  implements SurfaceHolder.Ca
         Random random = new Random();
         Log.i(TAG, "Drawing...");
         canvas.drawRGB(255, 128, 128);
+    }
+
+    public void comenzar(){
+        countDown= new CountDownTimer(leftTime, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.d("RAF", String.valueOf(leftTime));
+                leftTime =millisUntilFinished;
+                //progress = (int) (Start-leftTime);
+                //progressBarStatus =progress;
+                //pb.setProgress(progressBarStatus);
+                Log.d("RAF", String.valueOf(leftTime));
+            }
+
+            @Override
+            public void onFinish() {
+                // pb.setProgress((int) Start);
+                Toast.makeText(MainActivity.this, "Termino", Toast.LENGTH_SHORT).show();
+                countDown.cancel();
+                start=false;
+                calcular();
+
+            }
+        }.start();
+
+    }
+    public void calcular()
+    {
+        float total = acumB + acumM;
+        float prom = acumB/total;
+        float resultado = 1000 * prom;
+
+        Log.d("RTA", String.valueOf(total));
+        Log.d("RTA", String.valueOf(prom));
+        Log.d("RTA", String.valueOf(resultado));
     }
 }
 
